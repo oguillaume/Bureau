@@ -23,6 +23,7 @@ public class BureauService implements IBureauService{
     @Override
     public BureauDeVote chargerBureau(Connection conn, Integer idBureau) {
        String requete_select_bureau="SELECT * FROM bureau_de_vote WHERE num_bureau=?";
+      
        BureauDeVote bureau = new BureauDeVote();
        ResultSet resultat=null;
        try{
@@ -65,4 +66,8 @@ public class BureauService implements IBureauService{
         }
         return listeBureaux;
     }  
+    public void modifierBureau(Connection conn, String nom, String adresse, Integer numBureau){
+         String requete_modification = "UPDATE bureau_de_vote SET nom=?, adresse=? WHERE num_bureau=?";
+         base.executerRequeteUpdate(requete_modification,conn,false,nom,adresse,numBureau);
+    }
 }

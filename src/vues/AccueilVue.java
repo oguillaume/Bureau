@@ -9,6 +9,7 @@ import bdd.Base;
 import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import services.AdminService;
 
 /**
@@ -20,6 +21,11 @@ public class AccueilVue extends javax.swing.JFrame {
      * Creates new form AccueilVue
      */
     public AccueilVue() {
+        Base base = new Base();
+        if(base.connexion()==null) {
+            this.dispose();
+            JOptionPane.showMessageDialog(null,null, "Le fichier de configuration est introuvable !Veuillez le vérifier.",JOptionPane.WARNING_MESSAGE);
+        }
         initComponents();
     }
 
@@ -112,20 +118,16 @@ public class AccueilVue extends javax.swing.JFrame {
         AdminService serviceAdmin=new AdminService();
         jErreur.setText("");
         String message="identifiant ou mot de passe erronés,\n veuillez recommencer !";
-        try {
-            System.out.println("nom="+NomField.getText()+"; passe="+PasseField.getText());
-            bool=serviceAdmin.verifierAdmin(base.connexion(), NomField.getText(),PasseField.getText());
-            if(bool==true){
-                System.out.println("bienvenue");
-               VueAdministration choixvue =new VueAdministration();
-               this.dispose();
-               choixvue.show();
-            } else if (bool== false){
-                jErreur.setText(message);
-                System.out.println("oups, erreur");
-            }
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(AccueilVue.class.getName()).log(Level.SEVERE, "pb connexion", ex);
+        System.out.println("nom="+NomField.getText()+"; passe="+PasseField.getText());
+        bool=serviceAdmin.verifierAdmin(base.connexion(), NomField.getText(),PasseField.getText());
+        if(bool==true){
+            System.out.println("bienvenue");
+            VueAdministration choixvue =new VueAdministration();
+            this.dispose();
+            choixvue.show();
+        } else if (bool== false){
+            jErreur.setText(message);
+            System.out.println("oups, erreur");
         }    
     }//GEN-LAST:event_EnvoyerIdentiteActionPerformed
     /**

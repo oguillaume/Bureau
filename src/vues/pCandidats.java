@@ -251,44 +251,31 @@ public class pCandidats extends javax.swing.JPanel {
     private void AjouterBoutonCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AjouterBoutonCActionPerformed
         CandidatService serviceCandidat = new CandidatService();
         ElectionService serviceElection = new ElectionService();
-        try {
-            Connection connexion = base.connexion();
-            int idElection = Integer.parseInt(jBoxElection.getSelectedItem().toString());
-            Election election = serviceElection.chargerElection(base.connexion(), idElection);
-            serviceCandidat.creerCandidat(connexion, jNomCand.getText(), jPrenomCand.getText(), "", jAccroche.getText(), jPhoto.getText(), election);
-            base.deconnexion(connexion);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(VueAdministration.class.getName()).log(Level.SEVERE, "pb connexion", ex);
-        }
+        Connection connexion = base.connexion();
+        int idElection = Integer.parseInt(jBoxElection.getSelectedItem().toString());
+        Election election = serviceElection.chargerElection(base.connexion(), idElection);
+        serviceCandidat.creerCandidat(connexion, jNomCand.getText(), jPrenomCand.getText(), "", jAccroche.getText(), jPhoto.getText(), election);
+        base.deconnexion(connexion);
     }//GEN-LAST:event_AjouterBoutonCActionPerformed
 
     private void ModifierBoutonCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ModifierBoutonCActionPerformed
         CandidatService serviceCandidat = new CandidatService();
         ElectionService serviceElection = new ElectionService();
-        try {
-            Connection connexion = base.connexion();
-            int idElection = Integer.parseInt(jBoxElection.getSelectedItem().toString());
-            Election election = serviceElection.chargerElection(base.connexion(), idElection);
-            serviceCandidat.creerCandidat(connexion, jNomCand.getText(), jPrenomCand.getText(), "",
+        Connection connexion = base.connexion();
+        int idElection = Integer.parseInt(jBoxElection.getSelectedItem().toString());
+        Election election = serviceElection.chargerElection(base.connexion(), idElection);
+        serviceCandidat.creerCandidat(connexion, jNomCand.getText(), jPrenomCand.getText(), "",
                 jAccroche.getText(), jPhoto.getText(), election);
-            int idCndidat=Integer.parseInt(jIdCandidat.getText());
-
-            base.deconnexion(connexion);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(VueAdministration.class.getName()).log(Level.SEVERE, "pb connexion", ex);
-        }
+        int idCndidat=Integer.parseInt(jIdCandidat.getText());
+        base.deconnexion(connexion);
     }//GEN-LAST:event_ModifierBoutonCActionPerformed
 
     private void RetirerBoutonCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RetirerBoutonCActionPerformed
-        try {
-            Connection connexion = base.connexion();
-            CandidatService serviceCandidat = new CandidatService();
-            int id=jTableCandidat.getSelectedRow();
-            serviceCandidat.retirerCandidat(connexion,id);
-            base.deconnexion(connexion);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(VueAdministration.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        Connection connexion = base.connexion();
+        CandidatService serviceCandidat = new CandidatService();
+        int id=jTableCandidat.getSelectedRow();
+        serviceCandidat.retirerCandidat(connexion,id);
+        base.deconnexion(connexion);
     }//GEN-LAST:event_RetirerBoutonCActionPerformed
 
     private void AnnulerBoutonCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AnnulerBoutonCActionPerformed

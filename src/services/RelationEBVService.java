@@ -20,12 +20,8 @@ public class RelationEBVService {
         String ajouterBAE="INSERT INTO a_lieu_dans(id_election,num_bureau) VALUES (?,?)";
         Base base = new Base();
         Connection conn;
-        try {
-            conn = base.connexion();
-            base.executerRequeteUpdate(ajouterBAE, conn, true, idElection,idBureau);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(RelationEBVService.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        conn = base.connexion();
+        base.executerRequeteUpdate(ajouterBAE, conn, true, idElection,idBureau);
         
     }
 }

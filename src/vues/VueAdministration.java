@@ -7,6 +7,7 @@ import bdd.Electeur;
 import bdd.Election;
 import java.awt.Color;
 import java.awt.Component;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.time.LocalDate;
@@ -20,7 +21,6 @@ import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.ListCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import services.BureauService;
@@ -48,6 +48,8 @@ public class VueAdministration extends javax.swing.JFrame {
         chargerListe2Bureaux();
         chargerListeBoxBureaux();
         chargerListeBoxElection();
+        chargerTableBureaux();
+       
         buildMenu();
     }
     private void buildMenu(){ 
@@ -65,144 +67,112 @@ public class VueAdministration extends javax.swing.JFrame {
 		setJMenuBar(menuBar);
 	}
     private void chargerTableElecteur(){
-    // remplissage de la table d'affichage des electeurs - Panneau electeurs
-        try {
-            Connection connexion = base.connexion();
-            ElecteurService serviceElecteur = new ElecteurService();
-            DefaultTableModel table = (DefaultTableModel) pElecteurs1.getjTableElecteur().getModel();
-            List<Electeur> listeElecteurs = serviceElecteur.findAll(connexion);
-            for (Electeur elector : listeElecteurs) { 
-                int id = elector.getIdElecteur();
-                String nom = elector.getPersonne().getNom();
-                String prenom = elector.getPersonne().getPrenom();
-                String adresse = elector.getPersonne().getAdresse();
-                String datenaissance = convertSQlStringDateToStringUtilDate(elector.getDatedenaissance().toString());
-                Object[] row ={id,nom,prenom,adresse,datenaissance};
-                table.addRow(row);
-            }
-            base.deconnexion(connexion);
-            } catch (FileNotFoundException ex) {
-            Logger.getLogger(VueAdministration.class.getName()).log(Level.SEVERE, null, ex);
+        Connection connexion = base.connexion();
+        ElecteurService serviceElecteur = new ElecteurService();
+        DefaultTableModel table = (DefaultTableModel) pElecteurs1.getjTableElecteur().getModel();
+        List<Electeur> listeElecteurs = serviceElecteur.findAll(connexion);
+        for (Electeur elector : listeElecteurs) {
+            int id = elector.getIdElecteur();
+            String nom = elector.getPersonne().getNom();
+            String prenom = elector.getPersonne().getPrenom();
+            String adresse = elector.getPersonne().getAdresse();
+            String datenaissance = convertSQlStringDateToStringUtilDate(elector.getDatedenaissance().toString());
+            Object[] row ={id,nom,prenom,adresse,datenaissance};
+            table.addRow(row);
         }
+        base.deconnexion(connexion);
     }
     private void chargerListeBureau(){
     // charger la liste des bureaux - Panneau Electeurs
        pElecteurs1.getjBoxBureau().setMaximumRowCount(15);
        pElecteurs1.getjBoxBureau().setBackground(Color.GREEN);  
-        try {
-            BureauService serviceBureau = new BureauService();
-            Connection connexion = base.connexion();
-            List<BureauDeVote> listeBureaux =serviceBureau.listeBureau(connexion);
-            pElecteurs1.getjBoxBureau().setModel(new DefaultComboBoxModel(listeBureaux.toArray()));
-            pElecteurs1.getjBoxBureau().setRenderer(new ListCellRenderer(){
-            @Override
-            public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-                BureauDeVote bureau = (BureauDeVote) value;
-                String s=bureau.getNumBureau()+" "+bureau.getLibelle();
-                JLabel label = new JLabel(s);
-                return label;
-            }
-        });
-            base.deconnexion(connexion);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(VueAdministration.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "Pb de connection base");
-        }      
+       BureauService serviceBureau = new BureauService();
+       Connection connexion = base.connexion();
+       List<BureauDeVote> listeBureaux =serviceBureau.listeBureau(connexion);
+       pElecteurs1.getjBoxBureau().setModel(new DefaultComboBoxModel(listeBureaux.toArray()));
+       pElecteurs1.getjBoxBureau().setRenderer(new ListCellRenderer(){
+           @Override
+           public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+               BureauDeVote bureau = (BureauDeVote) value;
+               String s=bureau.getNumBureau()+" "+bureau.getLibelle();
+               JLabel label = new JLabel(s);
+               return label;
+           }
+       });
+       base.deconnexion(connexion);      
     }
     private void chargerTableCandidat(){
-    //remplir la table d'affichage des candidats - Panneau Candidats
-        try {
-            Connection connexion= base.connexion();
-            ElectionService serviceElection = new ElectionService();
-            CandidatService serviceCandidat = new CandidatService();
-            DefaultTableModel table = (DefaultTableModel) pCandidats1.getjTableCandidat().getModel();
-            List<Candidat> listCandidats = serviceCandidat.listeCandidat(connexion);
-            for (Candidat candidate : listCandidats) { 
-                int id = candidate.getIdCandidat();
-                String nom = candidate.getPersonne().getNom();
-                String prenom = candidate.getPersonne().getPrenom();               
-                Object[] row ={id,nom,prenom};
-                table.addRow(row);
-            }
-            base.deconnexion(connexion);          
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(VueAdministration.class.getName()).log(Level.SEVERE, null, ex);
+        Connection connexion= base.connexion();
+        ElectionService serviceElection = new ElectionService();
+        CandidatService serviceCandidat = new CandidatService();
+        DefaultTableModel table = (DefaultTableModel) pCandidats1.getjTableCandidat().getModel();
+        List<Candidat> listCandidats = serviceCandidat.listeCandidat(connexion);
+        for (Candidat candidate : listCandidats) {
+            int id = candidate.getIdCandidat();
+            String nom = candidate.getPersonne().getNom();
+            String prenom = candidate.getPersonne().getPrenom();
+            Object[] row ={id,nom,prenom};
+            table.addRow(row);
         }
+        base.deconnexion(connexion);
     }
     private void chargerListeElection(){
     // charger la liste des elections - Panneau Candidats
        pCandidats1.getjBoxElection().setMaximumRowCount(15);
        pCandidats1.getjBoxElection().setBackground(Color.GREEN);    
-        try {
-            Connection connexion = base.connexion();
-            ElectionService serviceElection = new ElectionService();
-            List<Election> listeElections = serviceElection.listeElection(connexion);           
-            if(listeElections.size()>0){
-            pCandidats1.getjBoxElection().setModel(new DefaultComboBoxModel(listeElections.toArray()));
-            pCandidats1.getjBoxElection().setRenderer(new ListCellRenderer() {
-                @Override
-                public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-                    Election elect = (Election) value;
-                    String s=elect.getIdElection()+" "+elect.getNom();
-                    JLabel label = new JLabel(s);
-                    return label;        
-                }
-            });
-            }
-            base.deconnexion(connexion);         
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(VueAdministration.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "Pb de connection base");
-        }       
+       Connection connexion = base.connexion();
+       ElectionService serviceElection = new ElectionService();
+       List<Election> listeElections = serviceElection.listeElection(connexion);
+       if(listeElections.size()>0){
+           pCandidats1.getjBoxElection().setModel(new DefaultComboBoxModel(listeElections.toArray()));
+           pCandidats1.getjBoxElection().setRenderer(new ListCellRenderer() {
+               @Override
+               public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                   Election elect = (Election) value;
+                   String s=elect.getIdElection()+" "+elect.getNom();
+                   JLabel label = new JLabel(s);
+                   return label;
+               }
+           });
+       }
+       base.deconnexion(connexion);       
     }
     private void chargerTableElection(){
-    //remplir la table d'affichage des élections - Panneau Elections
-        try {
-            Connection connexion = base.connexion();
-            ElectionService serviceElection = new ElectionService();
-            DefaultTableModel table = (DefaultTableModel) pElections1.getjTableElection().getModel();
-            List<Election> listeElections = serviceElection.listeElection(connexion);
-             for(Election elect : listeElections){
-                int id = elect.getIdElection();
-                String nom = elect.getNom();
-                String type = elect.getType();
-                String date = convertSQlStringDateToStringUtilDate(elect.getDateElection().toString());
-                Object[] row ={id,nom,type,date};
-                table.addRow(row);
-            }
-            base.deconnexion(connexion);  
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(VueAdministration.class.getName()).log(Level.SEVERE, null, ex);
+        Connection connexion = base.connexion();
+        ElectionService serviceElection = new ElectionService();
+        DefaultTableModel table = (DefaultTableModel) pElections1.getjTableElection().getModel();
+        List<Election> listeElections = serviceElection.listeElection(connexion);
+        for(Election elect : listeElections){
+            int id = elect.getIdElection();
+            String nom = elect.getNom();
+            String type = elect.getType();
+            String date = convertSQlStringDateToStringUtilDate(elect.getDateElection().toString());
+            Object[] row ={id,nom,type,date};
+            table.addRow(row);
         }
+        base.deconnexion(connexion);
     }
     private void chargerListe2Bureaux(){
-    // remplir la liste des bureaux (mode List)- Panneau elections
-         try{ 
-           DefaultListModel listeModel = new DefaultListModel();
-           Connection connexion= base.connexion();
-           BureauService serviceBureau = new BureauService();
-          
-             List<BureauDeVote> listeBureaux = serviceBureau.listeBureau(connexion);
-            for(BureauDeVote bureaux : listeBureaux){
-                String libelle = bureaux.getLibelle();
-                String numBureau= bureaux.getNumBureau().toString();
-                listeModel.addElement(numBureau+" "+libelle);
-            }
-            pElections1.getjListeBureaux().setModel(listeModel);    
-        }catch(FileNotFoundException ex){
-            Logger.getLogger(VueAdministration.class.getName()).log(Level.SEVERE, null, ex);
-        }    
+        DefaultListModel listeModel = new DefaultListModel();
+        Connection connexion= base.connexion();
+        BureauService serviceBureau = new BureauService();
+        List<BureauDeVote> listeBureaux = serviceBureau.listeBureau(connexion);
+        for(BureauDeVote bureaux : listeBureaux){
+            String libelle = bureaux.getLibelle();
+            String numBureau= bureaux.getNumBureau().toString();
+            listeModel.addElement(numBureau+" "+libelle);
+        }
+        pElections1.getjListeBureaux().setModel(listeModel);    
     }   
     private void chargerListeBoxBureaux(){
     // remplir la liste des bureaux (mode Box)- Panneau resultat
         pResultats1.getjComboBoxBureau().setMaximumRowCount(15);
         pResultats1.getjComboBoxBureau().setBackground(Color.GREEN);  
-        try {
-            BureauService serviceBureau = new BureauService();
-            Connection connexion = base.connexion();
-            List<BureauDeVote> listeBureaux =serviceBureau.listeBureau(connexion);
-            pResultats1.getjComboBoxBureau().setModel(new DefaultComboBoxModel(listeBureaux.toArray()));
-            pResultats1.getjComboBoxBureau().setRenderer(new ListCellRenderer(){
+        BureauService serviceBureau = new BureauService();
+        Connection connexion = base.connexion();
+        List<BureauDeVote> listeBureaux =serviceBureau.listeBureau(connexion);
+        pResultats1.getjComboBoxBureau().setModel(new DefaultComboBoxModel(listeBureaux.toArray()));
+        pResultats1.getjComboBoxBureau().setRenderer(new ListCellRenderer(){
             @Override
             public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
                 BureauDeVote bureau = (BureauDeVote) value;
@@ -211,21 +181,16 @@ public class VueAdministration extends javax.swing.JFrame {
                 return label;
             }
         });
-            base.deconnexion(connexion);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(VueAdministration.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "Pb de connection base");
-        }    
+        base.deconnexion(connexion);    
     } 
      private void chargerListeBoxElection(){
     // remplir la liste des elections (mode Box)- Panneau resultat
         pResultats1.getjComboBoxElection().setMaximumRowCount(15);
         pResultats1.getjComboBoxElection().setBackground(Color.GREEN);  
-        try {
-            ElectionService serviceElection = new ElectionService();
-            Connection connexion = base.connexion();
-            List<Election> listeElections =serviceElection.listeElection(connexion);
-            if(listeElections.size()>0){
+        ElectionService serviceElection = new ElectionService();
+        Connection connexion = base.connexion();
+        List<Election> listeElections =serviceElection.listeElection(connexion);
+        if(listeElections.size()>0){
             pResultats1.getjComboBoxElection().setModel(new DefaultComboBoxModel(listeElections.toArray()));
             pResultats1.getjComboBoxElection().setRenderer(new ListCellRenderer(){
                 @Override
@@ -237,13 +202,29 @@ public class VueAdministration extends javax.swing.JFrame {
                     return label;
                 }
             });
-            }
-            base.deconnexion(connexion);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(VueAdministration.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "Pb de connection base");
-        }    
+        }
+        base.deconnexion(connexion);
+     }
+     private void chargerTableBureaux(){
+        Connection connexion = base.connexion();
+       BureauService serviceBureau = new BureauService();
+        DefaultTableModel table = (DefaultTableModel) pBureaux1.getjTableBureaux().getModel();
+        List<BureauDeVote> listeBureaux = serviceBureau.listeBureau(connexion);
+        for(BureauDeVote bur : listeBureaux){
+            int id = bur.getNumBureau();
+            String nom = bur.getLibelle();
+            String adresse = bur.getAdresse();
+            System.out.println("coucou la table");
+            Object[] row ={id,nom,adresse};
+            table.addRow(row);
+        }
+        base.deconnexion(connexion);
     }
+     
+    
+     public String[] listerFichiers(File repertoire){
+         return repertoire.list();
+     }
     public static java.sql.Date convertUtiltoSQLDate(java.util.Date javaDate) {
         //conversion de java.util.date -> java.sql.Date
         java.sql.Date sqlDate = null;
@@ -296,6 +277,7 @@ public class VueAdministration extends javax.swing.JFrame {
         pElecteurs1 = new vues.pElecteurs();
         pElections1 = new vues.pElections();
         pResultats1 = new vues.pResultats();
+        pBureaux1 = new vues.pBureaux();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -303,6 +285,7 @@ public class VueAdministration extends javax.swing.JFrame {
         VueAdmin.addTab("Electeurs", pElecteurs1);
         VueAdmin.addTab("Elections", pElections1);
         VueAdmin.addTab("Resultats", pResultats1);
+        VueAdmin.addTab("Bureaux de vote", pBureaux1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -356,9 +339,12 @@ public class VueAdministration extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTabbedPane VueAdmin;
+    private vues.pBureaux pBureaux1;
     private vues.pCandidats pCandidats1;
     private vues.pElecteurs pElecteurs1;
     private vues.pElections pElections1;
     private vues.pResultats pResultats1;
     // End of variables declaration//GEN-END:variables
+
+    
 }

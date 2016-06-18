@@ -34,6 +34,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "BureauVote.findByNumBureau", query = "SELECT b FROM BureauDeVote b WHERE b.numBureau = :numBureau"),
     @NamedQuery(name = "BureauVote.findByVille", query = "SELECT b FROM BureauDeVote b WHERE b.ville = :ville")})
 public class BureauDeVote implements Serializable {
+    @Column(name = "adresse")
+    private String adresse;
     @JoinColumn(name = "id_election", referencedColumnName = "id_election")
     @ManyToOne
     private Election idElection;
@@ -132,6 +134,14 @@ public class BureauDeVote implements Serializable {
 
     public void setIdElection(Election idElection) {
         this.idElection = idElection;
+    }
+
+    public String getAdresse() {
+        return adresse;
+    }
+
+    public void setAdresse(String adresse) {
+        this.adresse = adresse;
     }
     
 }

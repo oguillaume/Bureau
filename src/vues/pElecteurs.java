@@ -351,8 +351,6 @@ public class pElecteurs extends javax.swing.JPanel {
                     "Confirmation",
                     JOptionPane.INFORMATION_MESSAGE );}
             base.deconnexion(connexion);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(VueAdministration.class.getName()).log(Level.SEVERE, "pb connexion", ex);
         } catch (ParseException ex) {
             Logger.getLogger(VueAdministration.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -394,24 +392,17 @@ public class pElecteurs extends javax.swing.JPanel {
                     "Confirmation!",
                     JOptionPane.INFORMATION_MESSAGE );}
             base.deconnexion(connexion);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(VueAdministration.class.getName()).log(Level.SEVERE, "pb de connexion", ex);
         } catch (ParseException ex) {
             Logger.getLogger(VueAdministration.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_ModifierBoutonEActionPerformed
 
     private void RetireBoutonEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RetireBoutonEActionPerformed
-        try {
-            Connection connexion = base.connexion();
-            ElecteurService serviceElecteur = new ElecteurService();
-            // on recupere l'id dans la table
-            int id=jTableElecteur.getSelectedRow();
-            serviceElecteur.retirerElecteur(connexion, id);
-            base.deconnexion(connexion);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(VueAdministration.class.getName()).log(Level.SEVERE, "pb de connexion", ex);
-        }
+        Connection connexion = base.connexion();
+        ElecteurService serviceElecteur = new ElecteurService();
+        int id=jTableElecteur.getSelectedRow();
+        serviceElecteur.retirerElecteur(connexion, id);
+        base.deconnexion(connexion);
     }//GEN-LAST:event_RetireBoutonEActionPerformed
 
 

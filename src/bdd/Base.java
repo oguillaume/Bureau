@@ -22,7 +22,8 @@ import services.Codage;
  * @author HP-G61
  */
 public class Base {
-    
+       private static final String fichier = "src/proprietes/base-ovh.properties";
+
     public ParametresBase parametres;
     public Base() {
     }
@@ -33,9 +34,13 @@ public class Base {
     *   Exception : Fichier de proprietes non localisé
     */
     
-    public Connection connexion() throws FileNotFoundException{
+    public Connection connexion() {
         parametres=new ParametresBase();
-        parametres.chargerParametres();
+      //  parametres.chargerParametres();
+        System.out.println("ficheir "+fichier);
+        String type = fichier.substring(fichier.lastIndexOf("."));
+        System.out.println("type "+type);
+        parametres.chargerParametres(fichier, type);
         String Driver=parametres.getDriver();
         String ip=parametres.getIp();
         String base=parametres.getBase();

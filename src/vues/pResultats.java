@@ -178,30 +178,23 @@ public class pResultats extends javax.swing.JPanel {
         for(int i=table.getRowCount();i>0;--i) table.removeRow(i-1);
         DefaultTableModel tableBureau=(DefaultTableModel)jTableBureau.getModel();
         for(int i=tableBureau.getRowCount();i>0;--i) tableBureau.removeRow(i-1);
-        try{
-            Connection connexion = base.connexion();
-            List<List<String>> resultats = serviceResultat.recupererResultatsElection(connexion);
-            //TO DO choisir résultats selon élection et bureau
-            int nbInscrits=serviceResultat.nombreInscrits(connexion);
-            int nbVotants=serviceResultat.nombreVotants(connexion);
-            
-            for(int i=0;i<resultats.size();i++){
-                int id = Integer.parseInt(resultats.get(i).get(0));
-                String nom = resultats.get(i).get(1);
-                int nbVoix=Integer.parseInt(resultats.get(i).get(2));
-                System.out.println("nbInscrits="+nbInscrits);
-                float percent=((float)nbVoix)/((float)nbInscrits)*100;
-                System.out.println("nbVoix/nbInscrits="+(float)(nbVoix/nbInscrits));
-                Object[] row ={id,nom,nbVoix,percent};
-                table.addRow(row);
-            }
-            Object[] row1={nbInscrits,nbVotants,null};
-            tableBureau.addRow(row1);
-        base.deconnexion(connexion);
-
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(VueAdministration.class.getName()).log(Level.SEVERE, null, ex);
+        Connection connexion = base.connexion();
+        List<List<String>> resultats = serviceResultat.recupererResultatsElection(connexion);
+        int nbInscrits=serviceResultat.nombreInscrits(connexion);
+        int nbVotants=serviceResultat.nombreVotants(connexion);
+        for(int i=0;i<resultats.size();i++){
+            int id = Integer.parseInt(resultats.get(i).get(0));
+            String nom = resultats.get(i).get(1);
+            int nbVoix=Integer.parseInt(resultats.get(i).get(2));
+            System.out.println("nbInscrits="+nbInscrits);
+            float percent=((float)nbVoix)/((float)nbInscrits)*100;
+            System.out.println("nbVoix/nbInscrits="+(float)(nbVoix/nbInscrits));
+            Object[] row ={id,nom,nbVoix,percent};
+            table.addRow(row);
         }
+        Object[] row1={nbInscrits,nbVotants,null};
+        tableBureau.addRow(row1);
+        base.deconnexion(connexion);
     }//GEN-LAST:event_jButtonChercherMouseClicked
 
 

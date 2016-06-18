@@ -1,0 +1,5 @@
+1	ABERDAM	Colette	Le Haut Marbré
+2	ALISON	Remi	Petit Marbré
+3	AUFFRAY	Jean	L'Epine Colin
+4	AUFFRAY	Louis	Le Pressoir
+5	AUFFRAY	Sylvain	12 rue des Taillandiers

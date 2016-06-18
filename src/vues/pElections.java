@@ -278,16 +278,11 @@ public class pElections extends javax.swing.JPanel {
     }//GEN-LAST:event_jTableElectionMouseClicked
 
     private void RetirerBoutonLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RetirerBoutonLActionPerformed
-        try {
-            Connection connexion = base.connexion();
-            ElectionService serviceElection = new ElectionService();
-            // on recupere l'id dans la table
-            int id=jTableElection.getSelectedRow();
-            serviceElection.retirerElection(connexion, id);
-            base.deconnexion(connexion);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(VueAdministration.class.getName()).log(Level.SEVERE, "pb de connexion", ex);
-        }
+        Connection connexion = base.connexion();
+        ElectionService serviceElection = new ElectionService();
+        int id=jTableElection.getSelectedRow();
+        serviceElection.retirerElection(connexion, id);
+        base.deconnexion(connexion);
     }//GEN-LAST:event_RetirerBoutonLActionPerformed
 
     private void ModifierBoutonLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ModifierBoutonLActionPerformed
@@ -337,8 +332,6 @@ public class pElections extends javax.swing.JPanel {
                     JOptionPane.INFORMATION_MESSAGE );
             }
             base.deconnexion(connexion);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(VueAdministration.class.getName()).log(Level.SEVERE, "pb connexion", ex);
         } catch (ParseException ex) {
             Logger.getLogger(VueAdministration.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -397,8 +390,6 @@ public class pElections extends javax.swing.JPanel {
                 }
             }
             base.deconnexion(connexion);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(VueAdministration.class.getName()).log(Level.SEVERE, "pb connexion", ex);
         } catch (ParseException ex) {
             Logger.getLogger(VueAdministration.class.getName()).log(Level.SEVERE, null, ex);
         }
