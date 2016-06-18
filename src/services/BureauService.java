@@ -70,4 +70,9 @@ public class BureauService implements IBureauService{
          String requete_modification = "UPDATE bureau_de_vote SET nom=?, adresse=? WHERE num_bureau=?";
          base.executerRequeteUpdate(requete_modification,conn,false,nom,adresse,numBureau);
     }
+    
+    public void retirerBureau(Connection conn,Integer numBureau){
+        String requete_retrait="DELETE FROM bureau_de_vote WHERE num_bureau=?";
+        base.executerRequeteUpdate(requete_retrait, conn, false, numBureau);
+    }
 }
